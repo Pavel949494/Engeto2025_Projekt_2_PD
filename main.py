@@ -15,7 +15,7 @@ def python_pozdrav(pozdrav, oddelovac, prvni_radek, druhy_radek):
 
     print(pozdrav, oddelovac, prvni_radek, druhy_radek, oddelovac, sep = "\n")
 
-def validace_cisla (cislo):
+def validace_cisla(cislo):
     """Funkce pro kontrolu správného formátu čísla, která ověřuje jeho délku, číselnou hodnotu a unikátnost znaků.
     Program hlídá, aby vstup tvořily čtyři různé číslice, délka byla přesně čtyři a první číslice nebyla nula."""
     
@@ -26,27 +26,27 @@ def validace_cisla (cislo):
     return(vysledek_validace)
 
 
-def vygeneruj_validni_cislo ():
+def vygeneruj_validni_cislo():
     """Funkce pro automatické generování náhodného čtyřmístného čísla, které splňuje všechna validační kritéria.
     Program v cyklu vytváří náhodné hodnoty a pomocí externí validace kontroluje, zda jsou číslice unikátní a číslo nezačíná nulou."""
     
-    gerenovani_validniho_cisla =  True
+    gerenovani_validniho_cisla = True
     while gerenovani_validniho_cisla:
         vygenerovane_cislo = str(random.randint(1000, 9999))
         if validace_cisla (vygenerovane_cislo): 
             gerenovani_validniho_cisla = False
     return (vygenerovane_cislo)
 
-def zadej_validni_cislo ():
+def zadej_validni_cislo():
     """Funkce pro interaktivní zadání čísla uživatelem, která vynucuje dodržení všech validačních pravidel.
     Program v cyklu čeká na vstup a v případě chyby uživatele upozorní, dokud není zadáno číslo se správnou délkou a unikátními ciframi."""
     
     zadani_validniho_cisla = True
     while zadani_validniho_cisla:
         zadane_cislo = str(input(">>>"))
-        if validace_cisla (zadane_cislo) == False: 
+        if not validace_cisla (zadane_cislo): 
             print("Use valid number")
-        elif validace_cisla (zadane_cislo): 
+        else: 
             zadani_validniho_cisla = False
     return (zadane_cislo)
         
@@ -75,19 +75,25 @@ def game():
     """Hlavní herní smyčka aplikace Bulls and Cows, která inicializuje hru a spravuje celkovou komunikaci s hráčem.
     Program generuje tajné číslo, v cyklu zpracovává uživatelské tipy, vypočítává počet zásahů a při úspěšném uhodnutí hru ukončí s výpisem statistik."""
 
-    pozdrav ='Hi there!'; oddelovac = 47 * '-'; prvni_radek ="I've generated a random 4 digit number for you."; 
-    druhy_radek = "Let's play a bulls and cows game."; oznameni_o_vyhre = "Correct, you've guessed the right number"; 
-    konec = "That's amazing!"; pokusy = 0; hra_bezi = True
+    pozdrav ='Hi there!'
+    oddelovac = 47 * '-'
+    prvni_radek ="I've generated a random 4 digit number for you."
+    druhy_radek = "Let's play a bulls and cows game."
+    oznameni_o_vyhre = "Correct, you've guessed the right number" 
+    konec = "That's amazing!"
+    pokusy = 0
+    hra_bezi = True
     python_pozdrav(pozdrav, oddelovac, prvni_radek, druhy_radek)
     vygenerovane_cislo = vygeneruj_validni_cislo ()
-    while hra_bezi == True:
-        zadane_cislo = zadej_validni_cislo (); pokusy += 1
+    while hra_bezi:
+        zadane_cislo = zadej_validni_cislo ()
+        pokusy += 1
         list_vygenerovane_cislo = list(vygenerovane_cislo)
         list_zadane_cislo = list(zadane_cislo)
         pocet_shod_pozice_cifer = kontrola_pozice_cifer(vygenerovane_cislo, zadane_cislo)
-        if pocet_shod_pozice_cifer == 0 or pocet_shod_pozice_cifer == 1: 
-            print(pocet_shod_pozice_cifer, "bulls")
-        if pocet_shod_pozice_cifer > 1 and pocet_shod_pozice_cifer < 5: 
+        if pocet_shod_pozice_cifer == 1: 
+            print(pocet_shod_pozice_cifer, "bull")
+        if pocet_shod_pozice_cifer == 0 or pocet_shod_pozice_cifer > 1 and pocet_shod_pozice_cifer < 5: 
             print(pocet_shod_pozice_cifer, "bulls") 
         if pocet_shod_pozice_cifer == 4: 
             print(oznameni_o_vyhre) 
@@ -95,15 +101,14 @@ def game():
                 print("in", pokusy, "guess!")
             elif pokusy > 1: 
                 print("in", pokusy, "guesses!")
-            print(oddelovac), 
+            print(oddelovac) 
             print(konec)
             sys.exit()
         pocet_shod_vyskytu_cifer = shody_vyskytu_cifer(list_vygenerovane_cislo, list_zadane_cislo) - pocet_shod_pozice_cifer 
-        if pocet_shod_pozice_cifer == 4:
-            hra_bezi = False 
-        elif pocet_shod_vyskytu_cifer == 1:
+        if pocet_shod_vyskytu_cifer == 1:
             print(pocet_shod_vyskytu_cifer, "cow")
         elif pocet_shod_vyskytu_cifer == 0 or pocet_shod_vyskytu_cifer > 1 and pocet_shod_vyskytu_cifer < 5:
             print(pocet_shod_vyskytu_cifer, "cows")          
 
-game()
+if __name__ == "__main__":
+    game()
